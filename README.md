@@ -161,7 +161,7 @@ patent-disclosure-skill/
 <tr>
 <td valign="middle" align="left" style="padding-right: 16px;">
 
-<img src="docx/make_a_friend.jpg" alt="随缘支持" width="10" />
+<img src="docx/make_a_friend.jpg" alt="随缘支持" width="280" />
 
 </td>
 <td valign="middle" align="left">
