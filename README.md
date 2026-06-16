@@ -1,4 +1,4 @@
-<div align="center">
+<img width="828" height="1124" alt="img_v3_0212n_62d72431-caa5-42e4-9ba1-9b969d682cfg" src="https://github.com/user-attachments/assets/02549b1d-34c4-44a6-9f38-f71c2ab38509" /><div align="center">
 
 # 代码to专利.skill
 
@@ -147,6 +147,7 @@ patent-disclosure-skill/
 - [产品流程与目录约定](docs/PRD.md)
 - [工程结构说明](docs/skill-structure.md)
 - [交底书模版细则](prompts/template_reference.md)
+- [中国专利](https://github.com/handsomestWei/patent-disclosure-skill)
 
 ---
 
@@ -160,7 +161,7 @@ patent-disclosure-skill/
 <tr>
 <td valign="middle" align="left" style="padding-right: 16px;">
 
-<img src="docs/thanks.jpg" alt="随缘支持" width="280" />
+<img src="docs/make_a_friend.jpg" alt="随缘支持" width="10" />
 
 </td>
 <td valign="middle" align="left">
