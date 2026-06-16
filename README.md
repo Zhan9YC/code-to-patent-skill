@@ -1,8 +1,8 @@
 <div align="center">
 
-# 中国专利.skill
+# 代码to专利.skill
 
-> 从项目文档到**可交付的技术交底书**：专利点挖掘、**查新优先国知局公布公告站**、脱敏成文与自检闭环。
+> 从项目代码到**可交付的技术交底书**：专利点挖掘、**查新优先国知局公布公告站**、脱敏成文与自检闭环。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
@@ -134,20 +134,7 @@ patent-disclosure-skill/
 
 ## 示例
 
-虚构扫描原材料见 [examples/README.md](examples/README.md)（如 `examples/example_batch_job_scheduler/knowledge/`）。  
-专利点、查新笔记、交底书等**完整产物**由流程生成到本地 **`outputs/{案件标识}/`**。
-
----
-
-## 运行效果
-
-**初版生成**（首次落盘交付）
-
-![初版生成：outputs 目录下的时间戳交底书、mermaid 图目录等](docs/效果例-初版生成.jpg)
-
-**迭代更新**（合并/纠正后再交付，多版本并存 + 对话记录）
-
-![迭代更新：新时间戳文件与交底书修订对话记录](docs/效果例-迭代更新.jpg)
+请根据当前code目录下代码和template目录下的专利交底书空模板，以填充式生成专利点、查新笔记、交底书等**完整产物**由流程生成到本地 **`outputs/{案件标识}/`**。
 
 ---
 
@@ -178,11 +165,13 @@ patent-disclosure-skill/
 </td>
 <td valign="middle" align="left">
 
-<a href="https://www.star-history.com/?repos=handsomestWei%2Fpatent-disclosure-skill&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=Zhan9YC%2Fcode-to-patent-skill&type=date&legend=top-left">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&theme=dark&legend=top-left" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&legend=top-left" />
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&legend=top-left" width="600" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Zhang9YC/code-to-patent-skill
+&type=date&theme=dark&legend=top-left" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Zhang9YC/code-to-patent-skill
+&type=date&legend=top-left" />
+    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Zhang9YC/code-to-patent-skill&type=date&legend=top-left" width="600" />
   </picture>
 </a>
 
@@ -196,6 +185,6 @@ patent-disclosure-skill/
 
 <div align="center">
 
-MIT License © [handsomestWei](https://github.com/handsomestWei/)
-
+MIT License © [Zhang9YC](https://github.com/Zhang9YC/)
+    
 </div>
