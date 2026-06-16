@@ -1,4 +1,3 @@
-<img width="828" height="1124" alt="img_v3_0212n_62d72431-caa5-42e4-9ba1-9b969d682cfg" src="https://github.com/user-attachments/assets/02549b1d-34c4-44a6-9f38-f71c2ab38509" /><div align="center">
 
 # 代码to专利.skill
 
