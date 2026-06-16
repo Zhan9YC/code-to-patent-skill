@@ -1,7 +1,7 @@
 ---
-name: patent-disclosure-skill
-description: "通用中国专利挖掘发现与交底书生成全流程：扫描项目文档挖掘专利点、讨论融合、基于脱敏模版生成技术交底书、联网查新、生成后自检含逻辑闭环与公式参数一致性。| Patent mining, disclosure drafting, prior-art search, and consistency self-check."
-version: "1.8.9"
+name: code2patent
+description: "通用中国专利挖掘发现与交底书生成全流程：扫描项目code目录和template目录，挖掘专利点、讨论融合、基于脱敏模版生成技术交底书、联网查新、生成后自检含逻辑闭环与公式参数一致性，自动生成符合公司专利要求的交底书。| Patent mining, disclosure drafting, prior-art search, and consistency self-check."
+version: "1.0.0"
 user-invocable: true
 argument-hint: "[可选：项目路径或技术主题关键词]"
 allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
@@ -15,6 +15,9 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
 
 - **语言**：默认与用户语种一致；专利与法律术语采用行业常用表述。
 - **图示定稿（Step 7）**：**3.2**/**3.4** 用 fenced **mermaid**；执行方式、**`mmdc`** 安装与降级规则见下表「交底书定稿交付」行及 **`tools/README.md`**。
+- **用户模板优先**：当用户提供 Word/Markdown 模板或明确要求按某模板交付时，模板的**章节、表格、字段、顺序、标题风格和 Word 版式**优先于本技能默认章节结构；不得把通用交底书结构强行套到用户模板上。必须先转换/读取模板，识别占位字段与表格结构，再按模板填充。Word 交付应优先以用户 `.docx` 模板为基底写入内容；只有用户未提供模板或模板不可用时，才使用默认 Markdown → Word 流程。
+- **正文严禁过程化查新痕迹**：查新结果只作为现有技术与区别论述依据；正文不得出现“检索过程”“搜索结果中间内容”“WebSearch/脚本/降级”等内部表述，也不得把论文/专利列表堆入正文。若模板含“检索结果附表”，将简化后的对比条目放入附表；正文仅写最接近通常做法、缺点与本案区别。
+- **源码类交底书必须数学化**：当主要材料是源码、算法或数据处理脚本时，Step 7 必须从代码中提取变量、阈值、分支、打分、筛选、输出闭环，并在具体实施方式中给出与代码一致的数学化/形式化描述。不得只写概念流程或泛化公式；公式、参数和流程须能对应到具体函数、常量或逻辑分支。
 
 ---
 
@@ -23,7 +26,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
 在用户使用以下任一方式时启用本技能：
 
 - 明确提及：专利挖掘、专利点、技术交底书、交底书、专利交底书、查新、现有技术对比等
-- 斜杠或简短指令：如 `/patent-disclosure-skill`、`/patent-disclosure`、`/交底书`
+- 斜杠或简短指令：如 `/code2patent`、`使用code2patent skill完成专利交底书，代码在code目录下，模板在template目录下`
 - **迭代模式（按意图识别）**：当用户意图明显是在**已有交底书或上一轮输出**上继续工作（如改章节、补实施例、补材料、修正参数/事实、调整表述等），**无需**用户写出「迭代」等固定词，也**不必**询问是否进入迭代——Agent 应 **`Read`** **`prompts/iteration_context.md`**，再 **`Read`** `prompts/merger.md`（侧重**新材料、扩展合并**）或 `prompts/correction_handler.md`（侧重**纠错、与事实或风格不符**），**严格按该文件开头的「执行门禁」**（优先执行，不可跳过）**做完合并或纠正**，**另存为新文件**：**`{案件名}_{YYYYMMDDHHmmss}.md`** 与同名 **`.docx`**（与首次定稿同一命名规则，见 **`disclosure_builder.md` §7.3 第 5 点**），**不覆盖**旧稿（除非用户明确要求）。**禁止**在迭代意图已成立时默认回到 Step 3–4 专利点全文分析（除非用户明确要求重新挖掘专利点）。对话中**已出现**交底书路径、附件或上文刚交付的草稿时，优先按迭代处理。
 
 ---
@@ -41,10 +44,11 @@ allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, Bash
 | 加载分步指令 | **`Read`** → `${CLAUDE_SKILL_DIR}/prompts/*.md`，见下表 |
 | 读代码、设计文档、PDF、图片 | 文件读取工具；大仓库先用搜索/语义检索定位再精读 |
 | Word（.docx）→ Markdown + 抽取图片（扫描前） | `Bash` → `python3 ${CLAUDE_SKILL_DIR}/tools/docx_to_md.py --input {path}.docx --output {dir}/{name}.md`；图片默认写入与 `.md` 同级的 `{name}_media/`；需 `pip install -r requirements.txt`（含 mammoth）；复杂版式可改由所内导出 PDF/MD 再扫 |
+| 按用户 Word 模板交付 | 先用 `docx_to_md.py` 读模板语义；再用 `python-docx` 或等效方式以原 `.docx` 为基底填充表格/段落，保留模板标题、表格、页眉页脚、字体与顺序；必要时另生成同名 `.md` 作为文本备份。**禁止**仅按默认 Markdown 转 Word 后声称符合模板 |
 | PowerPoint（.pptx）→ Markdown + 抽取图片（扫描前） | `Bash` → `python3 ${CLAUDE_SKILL_DIR}/tools/pptx_to_md.py --input {path}.pptx --output {dir}/{name}.md`；默认 `{name}_media/`；需 `pip install -r requirements.txt`（含 python-pptx）；**旧版 .ppt 不支持**，请先另存为 `.pptx`；图表/SmartArt 等若未以图片形状嵌入则可能仅能从备注或另行导出补全 |
 | 罗列目录、按名找文件 | 目录列举 / 按文件名搜索 |
 | 联网查新（Step 5） | 执行前 **`Read`** `prompts/prior_art_search.md`。**中国专利公布公告**：优先 **`Bash`** 运行 `cnipa_epub_search.py`；**须在生成命令前**归纳 **2～8 个相关度高的语义块**；**执行时须分多次调用**，**每次仅传一个**词块，**自行按 `pub_number` 合并**多轮 `EPUB_HITS_JSON`（勿单次工具调用堆多个 argv，见该 prompt）。一步拉取+解析、**不写 HTML 落盘**；须 **`pip install -r tools/requirements-cnipa.txt`** 且 **`python -m playwright install chromium`**。**`abstract` 规定必用**同该 prompt。需整句一次 AND 或保存 HTML 时用 `cnipa_epub_crawler.py`；异常或无果再 **WebSearch** |
-| 交底书定稿交付（**须同时** .md + .docx） | **3.2** 系统框图与 **3.4** 流程图均用 fenced ``mermaid``，**不要** ASCII 文字流程图/框图。定稿执行 **`tools/mermaid_render.py`**：mermaid 转 PNG（失败块保留围栏）后默认生成同名 **.docx**；若 Word 失败，按 stderr 提示手动运行 **`md_to_docx.py`**。详见 **`tools/README.md`** |
+| 交底书定稿交付（**须同时** .md + .docx） | 未提供用户模板时：**3.2** 系统框图与 **3.4** 流程图均用 fenced ``mermaid``，定稿执行 **`tools/mermaid_render.py`**。已提供 Word 模板时：图示可按模板要求插入 PNG/可编辑图，Word 以模板基底为准；若 `mmdc` 不可用，不得把未渲染 mermaid 代码块作为“符合模板”的 Word 图示交付，须改为插入 PNG、表格图或明确向用户说明限制并征得继续 |
 | 保存交底书路径 | 写入用户指定路径；未指定时可建议 `./outputs/{案件标识}/`；**凡交付的** `.md` / `.docx` 须为 **`{案件名}_{YYYYMMDDHHmmss}`**（§7.3 第 5 点，**含首次定稿与迭代**），勿默认覆盖旧稿；`outputs/` 整目录默认由 `.gitignore` 忽略 |
 | 迭代对话留档 | 每轮 **merger / correction** 交付后，在案件目录追加 **`交底书修订对话记录.md`**（**`tools/iteration_dialog_log.py`** 或等价手工），见 **`prompts/iteration_context.md`** |
 
